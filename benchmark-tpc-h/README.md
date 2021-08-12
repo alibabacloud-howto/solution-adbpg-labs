@@ -33,11 +33,11 @@ In TPC-H, SF (Scale Factor) is used to describe the amount of data, and 1 SF cor
 ---
 ### Index
 
-- [Step 1. Use Terraform to provision ECS and AnalyticDB PostgreSQL on Alibaba Cloud](https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/main/benchmark-tpc-h#step-1-use-terraform-to-provision-ecs-and-database-on-alibaba-cloud)
-- [Step 2. Config and mount data disk on ECS for TPC-H data set](https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/main/benchmark-tpc-h#step-2-config-and-mount-data-disk-on-ecs-for-tpc-h-data-set)
-- [Step 3. Generate TPC-H 100GB data set and upload to OSS](https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/main/benchmark-tpc-h#step-3-generate-tpc-h-100gb-data-set-and-upload-to-oss)
-- [Step 4. Create TPC-H schema in AnalyticDB PostgreSQL and load data from OSS](https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/main/benchmark-tpc-h#step-4-create-tpc-h-schema-in-analyticdb-postgresql-and-load-data-from-oss)
-- [Step 5. Run TPC-H query benchmark](https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/main/benchmark-tpc-h#step-5-run-tpc-h-query-benchmark)
+- [Step 1. Use Terraform to provision ECS and AnalyticDB PostgreSQL on Alibaba Cloud](https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/master/benchmark-tpc-h#step-1-use-terraform-to-provision-ecs-and-database-on-alibaba-cloud)
+- [Step 2. Config and mount data disk on ECS for TPC-H data set](https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/master/benchmark-tpc-h#step-2-config-and-mount-data-disk-on-ecs-for-tpc-h-data-set)
+- [Step 3. Generate TPC-H 100GB data set and upload to OSS](https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/master/benchmark-tpc-h#step-3-generate-tpc-h-100gb-data-set-and-upload-to-oss)
+- [Step 4. Create TPC-H schema in AnalyticDB PostgreSQL and load data from OSS](https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/master/benchmark-tpc-h#step-4-create-tpc-h-schema-in-analyticdb-postgresql-and-load-data-from-oss)
+- [Step 5. Run TPC-H query benchmark](https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/master/benchmark-tpc-h#step-5-run-tpc-h-query-benchmark)
 
 ---
 ### Step 1. Use Terraform to provision ECS and database on Alibaba Cloud
