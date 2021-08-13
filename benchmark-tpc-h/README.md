@@ -5,11 +5,21 @@
 
 #### About TPC-H
 
-TPC-H is a test set developed by the Transaction Processing Performance Council (TPC) to simulate decision support applications. At present, it is widely used in academia and industry to evaluate the performance of decision support technology applications. TPC-H is modeled according to the real production operating environment, and simulates a data warehouse of a sales system. It contains a total of 8 basic relationships, and the amount of data can be set from 1GB to 30TB. The benchmark test contains a total of 22 queries, and the main evaluation indicators are the response time of each query, that is, the time from submitting the query to the return of the result. The test results can comprehensively reflect the system's ability to process queries. For details, refer to the [TPC-H Specification](http://www.tpc.org/tpch/).
+As stated in the [TPC Benchmark™ H (TPC-H)](http://www.tpc.org/tpch/?spm=a2c63.p38356.879954.3.61ad2e2azV5uLJ) specification:
+
+“TPC-H is a decision support benchmark. It consists of a suite of business-oriented ad hoc queries and concurrent data modifications. The queries and the data populating the database have been chosen to have broad industry-wide relevance. This benchmark illustrates decision support systems that examine large volumes of data, execute queries with a high degree of complexity, and give answers to critical business questions.”
+
+For more information, see [TPC-H specifications](https://yq.aliyun.com/go/articleRenderRedirect?spm=a2c63.p38356.879954.4.61ad2e2azV5uLJ&url=http%3A%2F%2Fwww.tpc.org%2Ftpc_documents_current_versions%2Fpdf%2Ftpc-h_v2.17.3.pdf).
+
+- Note:
+
+``This implementation of TPC-H is derived from the TPC-H Benchmark and is not comparable to published TPC-H Benchmark results, as this implementation does not comply with all the requirements of the TPC-H Benchmark``.
 
 This is the ER(Entity Relationship) diagram of 8 tables in TPC-H.
 
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/tpch-er.png)
+
+(source: [TPC Benchmark H Standard Specification](http://www.tpc.org/tpc_documents_current_versions/pdf/tpc-h_v2.17.1.pdf?spm=a2c63.p38356.879954.5.61ad2e2azV5uLJ&file=tpc-h_v2.17.1.pdf))
 
 #### About the TPC-H benchmark data
 
