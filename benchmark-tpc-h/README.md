@@ -94,7 +94,9 @@ df -h
 ---
 ### Step 3. Generate TPC-H 100GB data set and upload to OSS
 
-Install GIT, clone this github project and generate TPC-H data set.
+Install GIT, clone this github project and generate TPC-H data set. [https://github.com/alibabacloud-howto/solution-adbpg-labs/blob/master/benchmark-tpc-h/data_gen_100gb.sh](https://github.com/alibabacloud-howto/solution-adbpg-labs/blob/master/benchmark-tpc-h/data_gen_100gb.sh) this file will generate 100GB data set. If you want to generate other size, please modify accordingly.
+
+![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/100gb.png)
 
 ```
 yum install -y git
@@ -164,7 +166,7 @@ Run the following command to download and setup AnalyticDB PostgreSQL client.
 ```bash
 wget http://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/assets/attach/181125/cn_zh/1598426198114/adbpg_client_package.el7.x86_64.tar.gz
 tar -xzvf adbpg_client_package.el7.x86_64.tar.gz
-cd adbpg_client_package/bin
+cd /mnt/adbpg_client_package/bin
 
 vim ~/.pgpass
 ```
@@ -179,7 +181,7 @@ Then run the commands to create TPC-H tables.
 
 ```
 chmod 0600 ~/.pgpass
-cd adbpg_client_package/bin
+cd /mnt/adbpg_client_package/bin
 ./psql -h<AnalyticDB PostgreSQL connection string> -Uadbpg adbpg -f /mnt/solution-adbpg-labs/benchmark-tpc-h/tpch-ddl.sql
 ```
 
@@ -192,6 +194,7 @@ Load TPC-H data set from OSS into AnalyticDB PostgreSQL. Please update the param
 - ``oss-cn-hongkong-internal.aliyuncs.com`` : change to the endpoint of your target TPC-H bucket accordingly
 
 ```
+cd /mnt/adbpg_client_package/bin
 ./psql -h<AnalyticDB PostgreSQL connection string> -Uadbpg adbpg -f /mnt/solution-adbpg-labs/benchmark-tpc-h/load_tpch_oss_data.sql
 ```
 
