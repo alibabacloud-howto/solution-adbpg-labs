@@ -52,9 +52,20 @@ In TPC-H, SF (Scale Factor) is used to describe the amount of data, and 1 SF cor
 ---
 ### Step 1. Use Terraform to provision ECS and database on Alibaba Cloud
 
+Run the [terraform script](https://github.com/alibabacloud-howto/solution-adbpg-labs/blob/master/benchmark-tpc-h/deployment/terraform/main.tf) to initialize the resources (in this tutorial, we use ECS and AnalyticDB PostgreSQL. OSS bucket will also be used for storing big TPC-H data set, and we will manually create the bucket later). Please specify the necessary information and region to deploy.
+
+After the Terraform script execution finished, the ECS and AnalyticDB PostgreSQL instance information are listed as below.
+
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/tf-done.png)
 
+---
 ### Step 2. Config and mount data disk on ECS for TPC-H data set
+
+Please log on to ECS with ``ECS EIP``.
+
+```bash
+ssh root@<ECS_EIP>
+```
 
 Initialize and mount the data disk.
 
@@ -62,7 +73,11 @@ Initialize and mount the data disk.
 fdisk -u /dev/vdb
 ```
 
+There will be some promote for the configuration, please follow the guide as shown in the image below.
+
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/fdisk.png)
+
+Then input the following commands to finish the data disk mount.
 
 ```
 fdisk -lu /dev/vdb
@@ -76,9 +91,10 @@ df -h
 
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/data-disk-mount-done.png)
 
+---
 ### Step 3. Generate TPC-H 100GB data set and upload to OSS
 
-Install GIT, clone the project and generate TPC-H data set.
+Install GIT, clone this github project and generate TPC-H data set.
 
 ```
 yum install -y git
@@ -87,19 +103,31 @@ git clone https://github.com/alibabacloud-howto/solution-adbpg-labs.git
 sh /mnt/solution-adbpg-labs/benchmark-tpc-h/data_gen_100gb.sh
 ```
 
+Since we configured to generate the TPC-H data in 8 partitions in parallel, when input ``top`` command, there shows 8 ``dbgen`` processes generating data.
+
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/dbgen-top.png)
+
+It will take for a while for these ``dbgen`` processes to finish the data generation. When ``dbgen`` processes disappear in the ``top`` view, then the data generation finish successfully.
 
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/dbgen-top-done.png)
 
+Run the command ``df -h``, it shows that 100+G ``Used`` under ``/mnt``, which is the size of generated TPC-H data set in 100 SF.
+
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/dbgen-done.png)
 
-Create bucket in OSS.
+Then create bucket in OSS for TPC-H data set.
 
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/oss-1.png)
 
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/oss-2.png)
 
-Upload TPC-H data files to OSS bucket for parallel loading to AnalyticDB PostgreSQL later.
+Upload TPC-H data files to OSS bucket for parallel loading to AnalyticDB PostgreSQL later. Please update the parameters accordingly in the file [https://github.com/alibabacloud-howto/solution-adbpg-labs/blob/master/benchmark-tpc-h/upload_tpch_oss.sh](https://github.com/alibabacloud-howto/solution-adbpg-labs/blob/master/benchmark-tpc-h/upload_tpch_oss.sh).
+- ``OSS_ENDPOINT`` : the OSS endpoint of the bucket created for TPC-H data set
+- ``OSS_BUCKET`` : the bucket created for TPC-H data set
+- ``AK_ID`` : your Alibaba Cloud account access key
+- ``AK_SECRET`` :  your Alibaba Cloud account access secret
+
+Then run the following commands:
 
 ```bash
 cd /mnt
@@ -110,8 +138,11 @@ sh /mnt/solution-adbpg-labs/benchmark-tpc-h/upload_tpch_oss.sh
 
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/tpchdata2oss-done-1.png)
 
+After the script finished, it will show 8 folders in OSS bucket for 8 tables correspondingly.
+
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/tpchdata2oss-done-2.png)
 
+---
 ### Step 4. Create TPC-H schema in AnalyticDB PostgreSQL and load data from OSS
 
 Download and setup AnalyticDB for PostgreSQL client.
@@ -122,9 +153,13 @@ wget http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/compat-opens
 rpm -i compat-openssl10-1.0.2o-3.el8.x86_64.rpm
 ```
 
-Create user account in AnalyticDB PostgreSQL, adbpg/N1cetest
+Create user account in AnalyticDB PostgreSQL:
+- Name: ``adbpg``
+- Password: ``N1cetest``
 
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/adbpg-account.png)
+
+Run the following command to download and setup AnalyticDB PostgreSQL client.
 
 ```bash
 wget http://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/assets/attach/181125/cn_zh/1598426198114/adbpg_client_package.el7.x86_64.tar.gz
@@ -134,9 +169,13 @@ cd adbpg_client_package/bin
 vim ~/.pgpass
 ```
 
+Input the following line in ``~/.pgpass`` file, ``<AnalyticDB PostgreSQL connection string>`` is the connection string of the AnalyticDB PostgreSQL cluster.
+
 ``<AnalyticDB PostgreSQL connection string>:5432:adbpg:adbpg:N1cetest``
 
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/pgpass.png)
+
+Then run the commands to create TPC-H tables.
 
 ```
 chmod 0600 ~/.pgpass
@@ -146,7 +185,11 @@ cd adbpg_client_package/bin
 
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/psql-ddl.png)
 
-Load TPC-H data set from OSS into AnalyticDB PostgreSQL.
+Load TPC-H data set from OSS into AnalyticDB PostgreSQL. Please update the parameters accordingly in the file [https://github.com/alibabacloud-howto/solution-adbpg-labs/blob/master/benchmark-tpc-h/load_tpch_oss_data.sql](https://github.com/alibabacloud-howto/solution-adbpg-labs/blob/master/benchmark-tpc-h/load_tpch_oss_data.sql) before executing the following commands.
+- ``oss://adbpg-tpch-bechmark-hongkong`` : change to your target TPC-H bucket accordingly
+- ``<ACCESS KEY>`` : your Alibaba Cloud account access key
+- ``<ACCESS SECRET>`` : your Alibaba Cloud account access secret
+- ``oss-cn-hongkong-internal.aliyuncs.com`` : change to the endpoint of your target TPC-H bucket accordingly
 
 ```
 ./psql -h<AnalyticDB PostgreSQL connection string> -Uadbpg adbpg -f /mnt/solution-adbpg-labs/benchmark-tpc-h/load_tpch_oss_data.sql
@@ -154,9 +197,16 @@ Load TPC-H data set from OSS into AnalyticDB PostgreSQL.
 
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/load-done.png)
 
+After loading finished, run the ``SELECT COUNT(*)`` to verify the row count in 8 tables.
+
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/load-done-verify.png)
 
+---
 ### Step 5. Run TPC-H query benchmark
+
+Please update the parameters accordingly in the file [https://github.com/alibabacloud-howto/solution-adbpg-labs/blob/master/benchmark-tpc-h/query.sh](https://github.com/alibabacloud-howto/solution-adbpg-labs/blob/master/benchmark-tpc-h/query.sh) before execution.
+- ``ADB_PG_URL`` : AnalyticDB PostgreSQL cluster connection string
+- ``ADB_PG_USER`` : AnalyticDB PostgreSQL cluster account user name (no need to change if you follow this guide to use ``adbpg``)
 
 ```
 sh /mnt/solution-adbpg-labs/benchmark-tpc-h/query.sh
