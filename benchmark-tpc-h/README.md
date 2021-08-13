@@ -219,6 +219,4 @@ Please update the parameters accordingly in the file [https://github.com/alibaba
 sh /mnt/solution-adbpg-labs/benchmark-tpc-h/query.sh
 ```
 
-![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/query.png)
-
 All the TPC-H queries are located in [https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/master/benchmark-tpc-h/tpch_query](https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/master/benchmark-tpc-h/tpch_query).
