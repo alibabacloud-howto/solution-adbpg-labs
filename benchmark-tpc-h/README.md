@@ -204,6 +204,10 @@ After loading finished, run the ``SELECT COUNT(*)`` to verify the row count in 8
 
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/load-done-verify.png)
 
+And please also run ``ANALYZE`` to collect statistics for tables for optimizer to generate better query execution plan.
+
+![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/analyze.png)
+
 ---
 ### Step 5. Run TPC-H query benchmark
 
@@ -214,5 +218,7 @@ Please update the parameters accordingly in the file [https://github.com/alibaba
 ```
 sh /mnt/solution-adbpg-labs/benchmark-tpc-h/query.sh
 ```
+
+![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/query.png)
 
 All the TPC-H queries are located in [https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/master/benchmark-tpc-h/tpch_query](https://github.com/alibabacloud-howto/solution-adbpg-labs/tree/master/benchmark-tpc-h/tpch_query).
