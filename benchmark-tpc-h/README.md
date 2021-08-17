@@ -147,23 +147,18 @@ After the script finished, it will show 8 folders in OSS bucket for 8 tables cor
 ---
 ### Step 4. Create TPC-H schema in AnalyticDB PostgreSQL and load data from OSS
 
-Download and setup AnalyticDB for PostgreSQL client.
-
-```bash
-cd /mnt
-wget http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/compat-openssl10-1.0.2o-3.el8.x86_64.rpm
-rpm -i compat-openssl10-1.0.2o-3.el8.x86_64.rpm
-```
-
 Create user account in AnalyticDB PostgreSQL:
 - Name: ``adbpg``
 - Password: ``N1cetest``
 
 ![image.png](https://github.com/alibabacloud-howto/solution-adbpg-labs/raw/master/benchmark-tpc-h/images/adbpg-account.png)
 
-Run the following command to download and setup AnalyticDB PostgreSQL client.
+Download and setup AnalyticDB for PostgreSQL client.
 
 ```bash
+cd /mnt
+wget http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/compat-openssl10-1.0.2o-3.el8.x86_64.rpm
+rpm -i compat-openssl10-1.0.2o-3.el8.x86_64.rpm
 wget http://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/assets/attach/181125/cn_zh/1598426198114/adbpg_client_package.el7.x86_64.tar.gz
 tar -xzvf adbpg_client_package.el7.x86_64.tar.gz
 cd /mnt/adbpg_client_package/bin
