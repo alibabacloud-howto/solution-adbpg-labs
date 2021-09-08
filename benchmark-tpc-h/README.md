@@ -61,7 +61,7 @@ After the Terraform script execution finished, the ECS and AnalyticDB PostgreSQL
 ---
 ### Step 2. Config and mount data disk on ECS for TPC-H data set
 
-Please log on to ECS with ``ECS EIP``.
+Please log on to ECS with ``ECS EIP``. By default, the password is ``N1cetest``, which is preset in the terraform provision script in Step 1. If you've already changed it, please update accordingly.
 
 ```bash
 ssh root@<ECS_EIP>
